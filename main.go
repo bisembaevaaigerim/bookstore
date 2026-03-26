@@ -2,10 +2,10 @@ package main
 
 import (
 	"bookstore/handlers"
-	"fmt"
-	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -22,11 +22,6 @@ func main() {
 
 	r.HandleFunc("/categories", handlers.GetCategories).Methods("GET")
 	r.HandleFunc("/categories", handlers.CreateCategory).Methods("POST")
-
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		fmt.Fprintln(w, `{"message": "Bookstore API is running"}`)
-	}).Methods("GET")
 
 	log.Println("Server running on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
