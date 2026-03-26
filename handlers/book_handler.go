@@ -3,10 +3,11 @@ package handlers
 import (
 	"bookstore/models"
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 var books = make(map[int]models.Book)
@@ -19,8 +20,12 @@ func GetBooks(w http.ResponseWriter, r *http.Request) {
 	authorIDFilter, _ := strconv.Atoi(q.Get("author_id"))
 
 	page, _ := strconv.Atoi(q.Get("page"))
+	limit, _ := strconv.Atoi(q.Get("limit"))
 	if page < 1 {
 		page = 1
+	}
+	if limit < 1 {
+		limit = 1
 	}
 	list := []models.Book{}
 	for _, b := range books {
@@ -36,8 +41,8 @@ func GetBooks(w http.ResponseWriter, r *http.Request) {
 		list = append(list, b)
 	}
 	total := len(list)
-	start := (page - 1) * 3
-	end := start + 3
+	start := (page - 1) * limit
+	end := start + limit
 	if start > total {
 		start = total
 	}
